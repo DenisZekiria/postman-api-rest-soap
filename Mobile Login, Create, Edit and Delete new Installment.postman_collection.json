@@ -1,0 +1,590 @@
+{
+	"info": {
+		"_postman_id": "bfb4194c-d327-4ef6-928a-bc59f43fd9a4",
+		"name": "Mobile Login, Create, Edit and Delete new Installment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31395851"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the response body as JSON\r",
+							"var responseBody = pm.response.json();\r",
+							"\r",
+							"// Extract the access_token from the response body\r",
+							"var accessToken = responseBody.access_token;\r",
+							"\r",
+							"// Set the access_token as a global variable\r",
+							"pm.collectionVariables.set('access_token', responseBody.access_token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "denis",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1111",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BaseURL}}/Users/login",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"Users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Me",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{BaseURL}}/Users/me",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"Users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Installment - first part",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Parse Response and Save Variables\", function () {\r",
+							"  var responseBody = pm.response.json();\r",
+							"  var result = responseBody.result;\r",
+							"\r",
+							"  // Extract and save desired values\r",
+							"  pm.collectionVariables.set(\"InstallmentType\", result.type);\r",
+							"  pm.collectionVariables.set(\"receiptCompanyName\", result.receiptCompanyName);\r",
+							"  pm.collectionVariables.set(\"vat\", result.vat);\r",
+							"  pm.collectionVariables.set(\"InstallmentReceiptDate\", result.receiptDate);\r",
+							"  pm.collectionVariables.set(\"receiptType\", result.receiptType);\r",
+							"  pm.collectionVariables.set(\"paymentType\", result.paymentType);\r",
+							"  pm.collectionVariables.set(\"InstallmentId\", result.id);\r",
+							"  pm.collectionVariables.set(\"number\", result.number);\r",
+							"  pm.collectionVariables.set(\"note\", result.note);\r",
+							"  pm.collectionVariables.set(\"ownerName\", result.ownerName);\r",
+							"  pm.collectionVariables.set(\"InstallmentCreated\", result.created);\r",
+							"  pm.collectionVariables.set(\"InstallmentModified\", result.modified);\r",
+							"  pm.collectionVariables.set(\"accessState\", result.accessState);\r",
+							"\r",
+							"  var conversionRate = result.rates.find(function(rate) {\r",
+							"    return rate.source === \"M\" && rate.target === \"L\";\r",
+							"  }).conversionRate;\r",
+							"  pm.collectionVariables.set(\"conversionRateMtoL\", conversionRate);\r",
+							"\r",
+							"  pm.expect(responseBody.result.type).to.eql(\"Installment\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generate a random price between 0.01 and 1 000.00\r",
+							"const minPrice = 0.01;\r",
+							"const maxPrice = 1000.00;\r",
+							"const randomPrice = (Math.random() * (maxPrice - minPrice) + minPrice).toFixed(2);\r",
+							"\r",
+							"// Save the random price (amount) as a global variable\r",
+							"pm.collectionVariables.set(\"randomPriceForInstallment\", randomPrice);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"receiptCompanyName\": \"TEST_DENIS\",\r\n    \"receiptType\": \"None\",\r\n    \"wmsDocumentItems\": null,\r\n    \"wmsNumber\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/InstallmentDocuments",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"InstallmentDocuments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Installment - second part",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"receiptCompanyName\": \"TEST_DENIS\",\r\n    \"receiptNumber\": null,\r\n    \"receiptDate\": \"{{receiptDate}}\",\r\n    \"receiptType\": \"{{receiptType}}\",\r\n    \"paymentType\": \"{{paymentType}}\",\r\n    \"vat\": 20.0,\r\n    \"register\": {\r\n        \"id\": 0,\r\n        \"name\": \"Стандартна каса\",\r\n        \"type\": \"Cash\",\r\n        \"contact\": null,\r\n        \"isDefault\": false\r\n    },\r\n    \"sourceItems\": [\r\n        {\r\n            \"currencyId\": \"L\",\r\n            \"amount\": {{randomPriceForInstallment}},\r\n            \"currency\": {\r\n                \"id\": \"L\",\r\n                \"currencyFormat\": \"{0:0.00} лв.\",\r\n                \"symbol\": \"лв.\",\r\n                \"name\": \"Български лев\"\r\n            }\r\n        }\r\n    ],\r\n    \"targetItems\": null,\r\n    \"agentName\": \"\",\r\n    \"fiscalNumber\": null,\r\n    \"customerName\": \"2\",\r\n    \"properties\": [],\r\n    \"rates\": [\r\n        {\r\n            \"source\": \"M\",\r\n            \"target\": \"L\",\r\n            \"conversionRate\": null\r\n        },\r\n        {\r\n            \"source\": \"$\",\r\n            \"target\": \"L\",\r\n            \"conversionRate\": 1.81667\r\n        },\r\n        {\r\n            \"source\": \"$\",\r\n            \"target\": \"M\",\r\n            \"conversionRate\": 4.62163\r\n        },\r\n        {\r\n            \"source\": \"1\",\r\n            \"target\": \"L\",\r\n            \"conversionRate\": 1.0\r\n        },\r\n        {\r\n            \"source\": \"2\",\r\n            \"target\": \"L\",\r\n            \"conversionRate\": 1.0\r\n        },\r\n        {\r\n            \"source\": \"3\",\r\n            \"target\": \"L\",\r\n            \"conversionRate\": 1.0\r\n        },\r\n        {\r\n            \"source\": \"4\",\r\n            \"target\": \"L\",\r\n            \"conversionRate\": 1.0\r\n        },\r\n        {\r\n            \"source\": \"5\",\r\n            \"target\": \"L\",\r\n            \"conversionRate\": 1.0\r\n        }\r\n    ],\r\n    \"id\": {{InstallmentId}},\r\n    \"created\": \"{{InstallmentCreated}}\",\r\n    \"modified\": \"{{InstallmentModified}}\",\r\n    \"number\": \"{{number}}\",\r\n    \"note\": \"{{note}}\",\r\n    \"ownerName\": \"{{ownerName}}\",\r\n    \"open\": false,\r\n    \"accessState\": \"FullControl\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/InstallmentDocuments",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"InstallmentDocuments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit new Installment - first part",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/InstallmentDocuments/{{InstallmentId}}/lock?force=False",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"InstallmentDocuments",
+						"{{InstallmentId}}",
+						"lock"
+					],
+					"query": [
+						{
+							"key": "force",
+							"value": "False"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit new Installment - second part",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"receiptCompanyName\": \"TEST_DENIS\",\r\n  \"receiptNumber\": null,\r\n  \"receiptDate\": \"{{InstallmentReceiptDate}}\",\r\n  \"receiptType\": \"None\",\r\n  \"paymentType\": \"Cash\",\r\n  \"vat\": 20.0,\r\n  \"register\": {\r\n    \"id\": 0,\r\n    \"name\": \"Стандартна каса\",\r\n    \"type\": \"Cash\",\r\n    \"contact\": null,\r\n    \"isDefault\": true\r\n  },\r\n  \"sourceItems\": [\r\n    {\r\n      \"currencyId\": \"L\",\r\n      \"amount\": {{randomPriceForInstallment}},\r\n      \"currency\": {\r\n        \"id\": \"L\",\r\n        \"currencyFormat\": \"{0:0.00} лв.\",\r\n        \"symbol\": \"лв.\",\r\n        \"name\": \"Български лев\"\r\n      }\r\n    }\r\n  ],\r\n  \"targetItems\": null,\r\n  \"agentName\": \"\",\r\n  \"fiscalNumber\": null,\r\n  \"customerName\": \"2\",\r\n  \"properties\": [],\r\n  \"rates\": [\r\n    {\r\n      \"source\": \"M\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 0.39308\r\n    },\r\n    {\r\n      \"source\": \"$\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.81667\r\n    },\r\n    {\r\n      \"source\": \"$\",\r\n      \"target\": \"M\",\r\n      \"conversionRate\": 4.62163\r\n    },\r\n    {\r\n      \"source\": \"1\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.0\r\n    },\r\n    {\r\n      \"source\": \"2\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.0\r\n    },\r\n    {\r\n      \"source\": \"3\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.0\r\n    },\r\n    {\r\n      \"source\": \"4\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.0\r\n    },\r\n    {\r\n      \"source\": \"5\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.0\r\n    }\r\n  ],\r\n  \"id\": {{InstallmentId}},\r\n  \"created\": \"{{InstallmentCreated}}\",\r\n  \"modified\": \"{{InstallmentModified}}\",\r\n  \"number\": \"0000000031\",\r\n  \"note\": \"EDIT-NOTE-AUTO\",\r\n  \"ownerName\": \"{{ownerName}}\",\r\n  \"open\": false,\r\n  \"accessState\": \"FullControl\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/InstallmentDocuments",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"InstallmentDocuments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete the new Installment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Body compare\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.isError).to.be.false;\r",
+							"    pm.expect(responseData.result).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/InstallmentDocuments/{{InstallmentId}}",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"InstallmentDocuments",
+						"{{InstallmentId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseURL",
+			"value": "YOUR_IP_AND_PORT/mobile",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": ""
+		},
+		{
+			"key": "InstallmentType",
+			"value": ""
+		},
+		{
+			"key": "receiptCompanyName",
+			"value": ""
+		},
+		{
+			"key": "vat",
+			"value": ""
+		},
+		{
+			"key": "receiptType",
+			"value": ""
+		},
+		{
+			"key": "paymentType",
+			"value": ""
+		},
+		{
+			"key": "number",
+			"value": ""
+		},
+		{
+			"key": "note",
+			"value": ""
+		},
+		{
+			"key": "ownerName",
+			"value": ""
+		},
+		{
+			"key": "accessState",
+			"value": ""
+		},
+		{
+			"key": "conversionRateMtoL",
+			"value": ""
+		},
+		{
+			"key": "InstallmentId",
+			"value": ""
+		},
+		{
+			"key": "InstallmentReceiptDate",
+			"value": ""
+		},
+		{
+			"key": "InstallmentCreated",
+			"value": ""
+		},
+		{
+			"key": "InstallmentModified",
+			"value": ""
+		},
+		{
+			"key": "randomPriceForInstallment",
+			"value": ""
+		}
+	]
+}

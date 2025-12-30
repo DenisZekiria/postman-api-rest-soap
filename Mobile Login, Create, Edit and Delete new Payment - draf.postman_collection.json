@@ -1,0 +1,492 @@
+{
+	"info": {
+		"_postman_id": "b421ef61-9d21-44c1-a87e-b074f36203e5",
+		"name": "Mobile Login, Create, Edit and Delete new Payment - draf",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31395851"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the response body as JSON\r",
+							"var responseBody = pm.response.json();\r",
+							"\r",
+							"// Extract the access_token from the response body\r",
+							"var accessToken = responseBody.access_token;\r",
+							"\r",
+							"// Set the access_token as a global variable\r",
+							"pm.collectionVariables.set('access_token', responseBody.access_token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "denis",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1111",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BaseURL}}/Users/login",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"Users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Me",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{BaseURL}}/Users/me",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"Users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Payment - first part",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Parse Response and Save Variables\", function () {\r",
+							"  var responseBody = pm.response.json();\r",
+							"  var result = responseBody.result;\r",
+							"\r",
+							"  // Extract and save desired values\r",
+							"  pm.collectionVariables.set(\"PaymentType\", result.type);\r",
+							"  pm.collectionVariables.set(\"receiptCompanyName\", result.receiptCompanyName);\r",
+							"  pm.collectionVariables.set(\"PaymentReceiptDate\", result.receiptDate);\r",
+							"  pm.collectionVariables.set(\"receiptType\", result.receiptType);\r",
+							"  pm.collectionVariables.set(\"PaymentId\", result.id);\r",
+							"  pm.collectionVariables.set(\"number\", result.number);\r",
+							"  pm.collectionVariables.set(\"note\", result.note);\r",
+							"  pm.collectionVariables.set(\"ownerName\", result.ownerName);\r",
+							"  pm.collectionVariables.set(\"PaymentCreated\", result.created);\r",
+							"  pm.collectionVariables.set(\"PaymentModified\", result.modified);\r",
+							"  pm.collectionVariables.set(\"accessState\", result.accessState);\r",
+							"\r",
+							"  var conversionRate = result.rates.find(function(rate) {\r",
+							"    return rate.source === \"M\" && rate.target === \"L\";\r",
+							"  }).conversionRate;\r",
+							"  pm.collectionVariables.set(\"conversionRateMtoL\", conversionRate);\r",
+							"\r",
+							"  pm.expect(responseBody.result.type).to.eql(\"Payment\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"receiptCompanyName\": \"TEST_DENIS\",\r\n  \"receiptType\": \"None\",\r\n  \"wmsDocumentItems\": null,\r\n  \"wmsNumber\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/PaymentDocuments",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"PaymentDocuments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payment Check - draf",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseURL}}/PaymentDocuments/check/{{PaymentClientName}}",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"PaymentDocuments",
+						"check",
+						"{{PaymentClientName}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Payment - second part",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"receiptCompanyName\": \"{{receiptCompanyName}}\",\r\n  \"receiptNumber\": \"{{receiptNumber}}\",\r\n  \"receiptDate\": \"{{receiptDate}}\",\r\n  \"receiptType\": \"{{receiptType}}\",\r\n  \"wmsDocumentItems\": null,\r\n  \"wmsNumber\": null,\r\n  \"items\": [\r\n    {\r\n      \"documentType\": \"{{PaymentType}}\",\r\n      \"saleDocumentId\": {{PaymentId}},\r\n      \"saleItemNumber\": 2,\r\n      \"saleDocumentNumber\": null,\r\n      \"position\": 2,\r\n      \"secondaryQuantity\": 0.0,\r\n      \"discount\": 0.0,\r\n      \"vat\": 20.0,\r\n      \"register\": {\r\n        \"id\": 0,\r\n        \"name\": \"Стандартна каса\",\r\n        \"type\": \"Cash\",\r\n        \"contact\": null,\r\n        \"isDefault\": false\r\n      },\r\n      \"paymentType\": \"Cash\",\r\n      \"properties\": [],\r\n      \"price\": 100.0000000000000000000000000,\r\n      \"currencyId\": \"L\",\r\n      \"currency\": {\r\n        \"id\": \"L\",\r\n        \"currencyFormat\": \"{0:0.00} лв.\",\r\n        \"symbol\": \"лв.\",\r\n        \"name\": \"Български лев\"\r\n      },\r\n      \"priceList\": \"Специална цена\",\r\n      \"priceListType\": \"Special\",\r\n      \"basePrice\": 8.333333333333333333333333333,\r\n      \"number\": 1,\r\n      \"warehouseName\": \"Мобилен\",\r\n      \"groupName\": \"Главна група\",\r\n      \"articleName\": \"Стока\",\r\n      \"batchName\": \"\",\r\n      \"quantity\": 10.0,\r\n      \"note\": \"\",\r\n      \"documentId\": {{PaymentId}},\r\n      \"articleDefinition\": {\r\n        \"articleName\": null,\r\n        \"groupName\": null,\r\n        \"code\": \"2\",\r\n        \"barcode\": \"07022024\",\r\n        \"parcelling\": \"бр.\",\r\n        \"secondaryParcelling\": \"\",\r\n        \"secondaryParcellingRelator\": null\r\n      },\r\n      \"wmsDocument\": null\r\n    }\r\n  ],\r\n  \"fiscalNumber\": null,\r\n  \"customerName\": \"Основен клиент\",\r\n  \"properties\": [],\r\n  \"rates\": [\r\n    {\r\n      \"source\": \"M\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 0.39308\r\n    },\r\n    {\r\n      \"source\": \"$\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.81667\r\n    },\r\n    {\r\n      \"source\": \"$\",\r\n      \"target\": \"M\",\r\n      \"conversionRate\": 4.62163\r\n    },\r\n    {\r\n      \"source\": \"1\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.0\r\n    },\r\n    {\r\n      \"source\": \"2\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.0\r\n    },\r\n    {\r\n      \"source\": \"3\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.0\r\n    },\r\n    {\r\n      \"source\": \"4\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.0\r\n    },\r\n    {\r\n      \"source\": \"5\",\r\n      \"target\": \"L\",\r\n      \"conversionRate\": 1.0\r\n    }\r\n  ],\r\n  \"id\": {{PaymentId}},\r\n  \"created\": \"{{PaymentCreated}}\",\r\n  \"modified\": \"{{PaymentModified}}\",\r\n  \"number\": \"\",\r\n  \"note\": \"\",\r\n  \"ownerName\": \"{{ownerName}}\",\r\n  \"open\": false,\r\n  \"accessState\": \"FullControl\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/PaymentDocuments",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"PaymentDocuments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete the new Payment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Body compare\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.isError).to.be.false;\r",
+							"    pm.expect(responseData.result).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/PaymentDocuments/{{PaymentId}}",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"PaymentDocuments",
+						"{{PaymentId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseURL",
+			"value": "YOUR_IP_AND_PORT/mobile",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": ""
+		},
+		{
+			"key": "PaymentClientName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "PaymentType",
+			"value": ""
+		},
+		{
+			"key": "receiptCompanyName",
+			"value": ""
+		},
+		{
+			"key": "PaymentReceiptDate",
+			"value": ""
+		},
+		{
+			"key": "receiptType",
+			"value": ""
+		},
+		{
+			"key": "PaymentId",
+			"value": ""
+		},
+		{
+			"key": "number",
+			"value": ""
+		},
+		{
+			"key": "note",
+			"value": ""
+		},
+		{
+			"key": "ownerName",
+			"value": ""
+		},
+		{
+			"key": "PaymentCreated",
+			"value": ""
+		},
+		{
+			"key": "PaymentModified",
+			"value": ""
+		},
+		{
+			"key": "accessState",
+			"value": ""
+		},
+		{
+			"key": "conversionRateMtoL",
+			"value": ""
+		}
+	]
+}

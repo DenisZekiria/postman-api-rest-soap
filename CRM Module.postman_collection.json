@@ -1,0 +1,772 @@
+{
+	"info": {
+		"_postman_id": "776c7dea-f226-498a-ba6e-6c28162d0da4",
+		"name": "CRM Module",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31395851"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the response body as JSON\r",
+							"var responseBody = pm.response.json();\r",
+							"\r",
+							"// Extract the access_token from the response body\r",
+							"var accessToken = responseBody.access_token;\r",
+							"\r",
+							"// Set the access_token as a global variable\r",
+							"pm.collectionVariables.set('access_token', responseBody.access_token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "denis",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1111",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BaseURL}}/Users/login",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"Users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Me",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{BaseURL}}/Users/me",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"Users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CRM Old Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{BaseURL}}/CrmTasks?searchString=+&skip=0&take=40&statuses=CrmUnfinished&statuses=CrmFinished&statuses=CrmDenied&DueDateBefore=&DueDateAfter=&InitialDateBefore=&InitialDateAfter=&FromUser=&ToUser=",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"CrmTasks"
+					],
+					"query": [
+						{
+							"key": "searchString",
+							"value": "+"
+						},
+						{
+							"key": "skip",
+							"value": "0"
+						},
+						{
+							"key": "take",
+							"value": "40"
+						},
+						{
+							"key": "statuses",
+							"value": "CrmUnfinished"
+						},
+						{
+							"key": "statuses",
+							"value": "CrmFinished"
+						},
+						{
+							"key": "statuses",
+							"value": "CrmDenied"
+						},
+						{
+							"key": "DueDateBefore",
+							"value": ""
+						},
+						{
+							"key": "DueDateAfter",
+							"value": ""
+						},
+						{
+							"key": "InitialDateBefore",
+							"value": ""
+						},
+						{
+							"key": "InitialDateAfter",
+							"value": ""
+						},
+						{
+							"key": "FromUser",
+							"value": ""
+						},
+						{
+							"key": "ToUser",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CRM Old Reports",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{BaseURL}}/CrmReports?searchString=+&skip=0&take=40&statuses=CrmUnfinished&statuses=CrmFinished&statuses=CrmDenied&DueDateBefore=&DueDateAfter=&InitialDateBefore=&InitialDateAfter=&FromUser=&ToUser=",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"CrmReports"
+					],
+					"query": [
+						{
+							"key": "searchString",
+							"value": "+"
+						},
+						{
+							"key": "skip",
+							"value": "0"
+						},
+						{
+							"key": "take",
+							"value": "40"
+						},
+						{
+							"key": "statuses",
+							"value": "CrmUnfinished"
+						},
+						{
+							"key": "statuses",
+							"value": "CrmFinished"
+						},
+						{
+							"key": "statuses",
+							"value": "CrmDenied"
+						},
+						{
+							"key": "DueDateBefore",
+							"value": ""
+						},
+						{
+							"key": "DueDateAfter",
+							"value": ""
+						},
+						{
+							"key": "InitialDateBefore",
+							"value": ""
+						},
+						{
+							"key": "InitialDateAfter",
+							"value": ""
+						},
+						{
+							"key": "FromUser",
+							"value": ""
+						},
+						{
+							"key": "ToUser",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CRM Users and Agents",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{BaseURL}}/Users?searchString=+&skip=0&take=40&types=User%2cAgent",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"Users"
+					],
+					"query": [
+						{
+							"key": "searchString",
+							"value": "+"
+						},
+						{
+							"key": "skip",
+							"value": "0"
+						},
+						{
+							"key": "take",
+							"value": "40"
+						},
+						{
+							"key": "types",
+							"value": "User%2cAgent"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CRM Customer and Distributor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{BaseURL}}/Users?searchString=+&skip=0&take=40&types=Customer%2cDistributor",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"Users"
+					],
+					"query": [
+						{
+							"key": "searchString",
+							"value": "+"
+						},
+						{
+							"key": "skip",
+							"value": "0"
+						},
+						{
+							"key": "take",
+							"value": "40"
+						},
+						{
+							"key": "types",
+							"value": "Customer%2cDistributor"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CRM Create new Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Parse Response and Save Variables\", function () {\r",
+							"  var responseBody = pm.response.json();\r",
+							"  var result = responseBody.result;\r",
+							"\r",
+							"  // Check if the result object exists\r",
+							"  if (result) {\r",
+							"    // Extract and save desired values\r",
+							"    var id = result.id || null;\r",
+							"    var number = result.number || null;\r",
+							"    var toUser = result.toUser || null;\r",
+							"    var fromUser = result.fromUser || null;\r",
+							"    var subject = result.subject || null;\r",
+							"    var taskDescription = result.taskDescription || null;\r",
+							"    var initialDate = result.initialDate || null;\r",
+							"    var dueDate = result.dueDate || null;\r",
+							"    var dateCreated = result.dateCreated || null;\r",
+							"\r",
+							"    // Save variables to the collection\r",
+							"    pm.collectionVariables.set(\"CRM_id\", id);\r",
+							"    pm.collectionVariables.set(\"CRM_number\", number);\r",
+							"    pm.collectionVariables.set(\"toUser\", toUser);\r",
+							"    pm.collectionVariables.set(\"fromUser\", fromUser);\r",
+							"    pm.collectionVariables.set(\"subject\", subject);\r",
+							"    pm.collectionVariables.set(\"taskDescription\", taskDescription);\r",
+							"    pm.collectionVariables.set(\"initialDate\", initialDate);\r",
+							"    pm.collectionVariables.set(\"dueDate\", dueDate);\r",
+							"    pm.collectionVariables.set(\"dateCreated\", dateCreated);\r",
+							"  } else {\r",
+							"    pm.test(\"Result object is missing\", function () {\r",
+							"      pm.expect(result).to.not.be.undefined;\r",
+							"    });\r",
+							"  }\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get the current date and time\r",
+							"const currentDate = new Date();\r",
+							"\r",
+							"// Format the initialDate (current date and time in ISO 8601 format)\r",
+							"const initialDate = currentDate.toISOString();\r",
+							"\r",
+							"// Calculate dueDate (current date + 7 days)\r",
+							"const dueDate = new Date(currentDate);\r",
+							"dueDate.setDate(dueDate.getDate() + 7);\r",
+							"\r",
+							"// Format the dueDate in ISO 8601 format\r",
+							"const dueDateISO = dueDate.toISOString();\r",
+							"\r",
+							"// Set the variables for initialDate and dueDate\r",
+							"pm.variables.set(\"initialDate\", initialDate);\r",
+							"pm.variables.set(\"dueDate\", dueDateISO);\r",
+							"\r",
+							"// Set the variables for initialDateText and dueDateText (for previous request)\r",
+							"const hours = currentDate.getHours().toString().padStart(2, '0');\r",
+							"const minutes = currentDate.getMinutes().toString().padStart(2, '0');\r",
+							"const initialDateText = `${hours}:${minutes} ч.`;\r",
+							"const dueDateText = dueDate.toLocaleDateString('bg-BG', { day: 'numeric', month: 'short' });\r",
+							"pm.variables.set(\"initialDateText\", initialDateText);\r",
+							"pm.variables.set(\"dueDateText\", dueDateText);\r",
+							"\r",
+							"\r",
+							"///////////////////////////////////////\r",
+							"\r",
+							"// Generate random digits (e.g., a random 6-digit number)\r",
+							"const randomDigits = Math.floor(100000 + Math.random() * 900000);\r",
+							"\r",
+							"// Create the subject text\r",
+							"const subjectText = `Random generate text with Postman - ${randomDigits}`;\r",
+							"\r",
+							"// Set the variable for subject\r",
+							"pm.variables.set(\"subject\", subjectText);\r",
+							"\r",
+							"///////////////////////////////////////\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\": \"CrmUnfinished\",\r\n    \"isTask\": true,\r\n    \"statusExtended\": \"CrmUnfinished\",\r\n    \"rawStatusText\": \"Активна\",\r\n    \"statusText\": \"Активна\",\r\n    \"initialDateText\": \"{{initialDateText}}\",\r\n    \"dueDateText\": \"{{dueDateText}}\",\r\n    \"noCompanies\": true,\r\n    \"crmTaskCompanies\": [],\r\n    \"noDocuments\": true,\r\n    \"crmTaskDocuments\": [],\r\n    \"noArticles\": true,\r\n    \"crmTaskArticles\": [],\r\n    \"noLinks\": true,\r\n    \"crmTaskLinks\": [],\r\n    \"noReports\": true,\r\n    \"crmReports\": [],\r\n    \"id\": 0,\r\n    \"toUser\": \"denis\",\r\n    \"fromUser\": \"denis\",\r\n    \"owner\": null,\r\n    \"wave\": 0,\r\n    \"subject\": \"{{subject}}\",\r\n    \"taskDescription\": \"CRM task created with Postman!\",\r\n    \"initialDate\": \"{{initialDate}}\",\r\n    \"dueDate\": \"{{dueDate}}\",\r\n    \"dateCreated\": null,\r\n    \"dateChanged\": null,\r\n    \"reportId\": null,\r\n    \"number\": null\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/CrmTasks",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"CrmTasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CRM Create new Report to Task - TODO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"status\": \"CrmUnfinished\",\r\n  \"isTask\": true,\r\n  \"statusExtended\": \"CrmFinished\",\r\n  \"rawStatusText\": \"Активна\",\r\n  \"statusText\": \"Изпълнена\",\r\n  \"initialDateText\": \"6:53 ч.\",\r\n  \"dueDateText\": \"21 авг\",\r\n  \"noCompanies\": true,\r\n  \"crmTaskCompanies\": [],\r\n  \"noDocuments\": true,\r\n  \"crmTaskDocuments\": [],\r\n  \"noArticles\": true,\r\n  \"crmTaskArticles\": [],\r\n  \"noLinks\": true,\r\n  \"crmTaskLinks\": [],\r\n  \"noReports\": false,\r\n  \"crmReports\": [\r\n    {\r\n      \"status\": \"CrmUnfinished\",\r\n      \"isTask\": false,\r\n      \"statusExtended\": \"CrmUnfinished\",\r\n      \"rawStatusText\": \"Активна\",\r\n      \"statusText\": \"Активна\",\r\n      \"initialDateText\": \"0:00 ч.\",\r\n      \"dueDateText\": \"\",\r\n      \"noCompanies\": true,\r\n      \"crmTaskCompanies\": [],\r\n      \"noDocuments\": true,\r\n      \"crmTaskDocuments\": [],\r\n      \"noArticles\": true,\r\n      \"crmTaskArticles\": [],\r\n      \"noLinks\": true,\r\n      \"crmTaskLinks\": [],\r\n      \"crmTask\": {\r\n        \"status\": \"CrmUnfinished\",\r\n        \"isTask\": true,\r\n        \"statusExtended\": \"CrmOverdue\",\r\n        \"rawStatusText\": \"Активна\",\r\n        \"statusText\": \"Просрочена\",\r\n        \"initialDateText\": \"9:54 ч.\",\r\n        \"dueDateText\": \"9:54 ч.\",\r\n        \"noCompanies\": true,\r\n        \"crmTaskCompanies\": [],\r\n        \"noDocuments\": true,\r\n        \"crmTaskDocuments\": [],\r\n        \"noArticles\": true,\r\n        \"crmTaskArticles\": [],\r\n        \"noLinks\": true,\r\n        \"crmTaskLinks\": [],\r\n        \"noReports\": true,\r\n        \"crmReports\": [],\r\n        \"id\": 0,\r\n        \"toUser\": null,\r\n        \"fromUser\": null,\r\n        \"owner\": null,\r\n        \"wave\": 0,\r\n        \"subject\": null,\r\n        \"taskDescription\": null,\r\n        \"initialDate\": \"2024-08-14T09:54:51.6046181+03:00\",\r\n        \"dueDate\": \"2024-08-14T09:54:51.604623+03:00\",\r\n        \"dateCreated\": null,\r\n        \"dateChanged\": null,\r\n        \"reportId\": null,\r\n        \"number\": {{CRM_number}}\r\n      },\r\n      \"crmTaskNumber\": {{CRM_number}},\r\n      \"description\": \"Статус: Активна; Начална дата: 0:00 ч.; Крайна дата: ...\",\r\n      \"id\": 0,\r\n      \"taskId\": 0,\r\n      \"toUser\": null,\r\n      \"company\": null,\r\n      \"subject\": \"тест\",\r\n      \"taskDescription\": \"тест\",\r\n      \"initialDate\": \"2024-08-14T00:00:00+03:00\",\r\n      \"dueDate\": null,\r\n      \"dateCreated\": null,\r\n      \"dateChanged\": null,\r\n      \"connectBy\": null\r\n    }\r\n  ],\r\n  \"id\": {{CRM_id}},\r\n  \"toUser\": \"denis\",\r\n  \"fromUser\": \"denis\",\r\n  \"owner\": \"\",\r\n  \"wave\": 0,\r\n  \"subject\": {{subject}},\r\n  \"taskDescription\": {{taskDescription}},\r\n  \"initialDate\": {{initialDate}},\r\n  \"dueDate\": {{dueDate}},\r\n  \"dateCreated\": {{dateCreated}}\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/CrmTasks ",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"CrmTasks "
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseURL",
+			"value": "YOUR_IP_AND_PORT/mobile",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": ""
+		},
+		{
+			"key": "toUser",
+			"value": ""
+		},
+		{
+			"key": "fromUser",
+			"value": ""
+		},
+		{
+			"key": "subject",
+			"value": ""
+		},
+		{
+			"key": "taskDescription",
+			"value": ""
+		},
+		{
+			"key": "initialDate",
+			"value": ""
+		},
+		{
+			"key": "dueDate",
+			"value": ""
+		},
+		{
+			"key": "dateCreated",
+			"value": ""
+		},
+		{
+			"key": "CRM_id",
+			"value": ""
+		},
+		{
+			"key": "CRM_number",
+			"value": ""
+		}
+	]
+}

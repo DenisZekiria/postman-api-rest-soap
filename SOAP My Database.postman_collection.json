@@ -1,0 +1,377 @@
+{
+	"info": {
+		"_postman_id": "16ff7911-9276-4469-b483-77b630a99a86",
+		"name": "SOAP My Database",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31395851",
+		"_collection_link": "https://solar-rocket-668396.postman.co/workspace/Test-API-SOAP~d2a0c7df-f2b2-4b5f-b4de-13d681d3bc05/collection/31395851-16ff7911-9276-4469-b483-77b630a99a86?action=share&source=collection_link&creator=31395851"
+	},
+	"item": [
+		{
+			"name": "Purvo proverka na metodite",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true,
+					"content-length": true,
+					"host": true,
+					"user-agent": true,
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "YOUR_IP_AND_PORT",
+					"protocol": "http",
+					"host": [
+						"84",
+						"43",
+						"202",
+						"90"
+					],
+					"port": "84",
+					"path": [
+						"Services",
+						"TestService.asmx"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SpotBGService SOAP",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true,
+					"content-length": true,
+					"host": true,
+					"user-agent": true,
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"value": "YOUR_IP_AND_PORT",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8",
+						"type": "text"
+					},
+					{
+						"key": "Content-Length",
+						"value": "length",
+						"type": "text"
+					},
+					{
+						"key": "SOAPAction",
+						"value": "\"http://tempuri.org/AbandonSession\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <soap:Header>\r\n    <AuthenticationHeader xmlns=\"http://tempuri.org/\">\r\n      <Database>MW</Database>\r\n      <Username>denis</Username>\r\n      <Password>1111</Password>\r\n    </AuthenticationHeader>\r\n  </soap:Header>\r\n  <soap:Body>\r\n    <AbandonSession xmlns=\"http://tempuri.org/\" />\r\n  </soap:Body>\r\n</soap:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "YOUR_IP_AND_PORT",
+					"protocol": "http",
+					"host": [
+						"84",
+						"43",
+						"202",
+						"90"
+					],
+					"port": "84",
+					"path": [
+						"Services",
+						"TestService.asmx"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetArticlesByDate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true,
+					"content-length": true,
+					"host": true,
+					"user-agent": true,
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"value": "YOUR_IP_AND_PORT",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8",
+						"type": "text"
+					},
+					{
+						"key": "Content-Length",
+						"value": "length",
+						"type": "text"
+					},
+					{
+						"key": "SOAPAction",
+						"value": "\"http://tempuri.org/GetArticlesByDate\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <soap:Header>\r\n    <AuthenticationHeader xmlns=\"http://tempuri.org/\">\r\n      <Database>MW</Database>\r\n      <Username>denis</Username>\r\n      <Password>1111</Password>\r\n    </AuthenticationHeader>\r\n  </soap:Header>\r\n  <soap:Body>\r\n    <GetArticlesByDate xmlns=\"http://tempuri.org/\">\r\n      <lastSyncDate>2025-01-01T17:03:00</lastSyncDate>\r\n    </GetArticlesByDate>\r\n  </soap:Body>\r\n</soap:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "YOUR_IP_AND_PORT/Services/TestService.asmx",
+					"protocol": "http",
+					"host": [
+						"84",
+						"43",
+						"202",
+						"90"
+					],
+					"port": "84",
+					"path": [
+						"Services",
+						"TestService.asmx"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetArticlesByDate 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true,
+					"content-length": true,
+					"host": true,
+					"user-agent": true,
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"value": "YOUR_IP_AND_PORT",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8",
+						"type": "text"
+					},
+					{
+						"key": "Content-Length",
+						"value": "length",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "SOAPAction",
+						"value": "\"http://tempuri.org/GetArticlesByDate\"",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <soap:Header>\r\n    <AuthenticationHeader xmlns=\"http://tempuri.org/\">\r\n      <Database>MW</Database>\r\n      <Username>denis</Username>\r\n      <Password>1111</Password>\r\n    </AuthenticationHeader>\r\n  </soap:Header>\r\n  <soap:Body>\r\n    <GetArticlesByDate xmlns=\"http://tempuri.org/\">\r\n      <lastSyncDate>2025-01-01T17:03:00</lastSyncDate>\r\n    </GetArticlesByDate>\r\n  </soap:Body>\r\n</soap:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "YOUR_IP_AND_PORT/Services/TestService.asmx?op=GetArticlesByDate",
+					"protocol": "http",
+					"host": [
+						"84",
+						"43",
+						"202",
+						"90"
+					],
+					"port": "84",
+					"path": [
+						"Services",
+						"TestService.asmx"
+					],
+					"query": [
+						{
+							"key": "op",
+							"value": "GetArticlesByDate"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Services Base",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true,
+					"content-length": true,
+					"host": true,
+					"user-agent": true,
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"value": "YOUR_IP_AND_PORT",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8",
+						"type": "text"
+					},
+					{
+						"key": "Content-Length",
+						"value": "length",
+						"type": "text"
+					},
+					{
+						"key": "SOAPAction",
+						"value": "\"http://tempuri.org/GetSellInfo\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <soap:Header>\r\n    <AuthenticationHeader xmlns=\"http://tempuri.org/\">\r\n      <Database>MW</Database>\r\n      <Username>denis</Username>\r\n      <Password>1111</Password>\r\n    </AuthenticationHeader>\r\n  </soap:Header>\r\n  <soap:Body>\r\n    <GetSellInfo xmlns=\"http://tempuri.org/\">\r\n        <orderID>0000000001</orderID>\r\n    </GetSellInfo>\r\n  </soap:Body>\r\n</soap:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "YOUR_IP_AND_PORT/Services/base/ExampleService.asmx",
+					"protocol": "http",
+					"host": [
+						"84",
+						"43",
+						"202",
+						"90"
+					],
+					"port": "84",
+					"path": [
+						"Services",
+						"base",
+						"ExampleService.asmx"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
